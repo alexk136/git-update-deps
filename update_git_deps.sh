@@ -45,8 +45,11 @@ update_git_package() {
     print_message $YELLOW "  Clearing pip cache..."
     pip cache remove "$package_name" || true
     
-    # Reinstall from git
+    # Reinstall from git with force upgrade
     print_message $YELLOW "  Installing latest version from git..."
+    pip install --force-reinstall --no-cache-dir --no-deps "$git_url"
+    
+    # Reinstall dependencies in case they were missed
     pip install --no-cache-dir "$git_url"
     
     print_message $GREEN "✅ Successfully updated $package_name"
