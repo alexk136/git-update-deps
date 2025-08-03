@@ -49,15 +49,52 @@ update_git_package() {
     print_message $YELLOW "  Installing latest version from git..."
     pip install --force-reinstall --no-cache-dir --no-deps "$git_url"
     
-    # Reinstall dependencies in case they were missed
-    pip install --no-cache-dir "$git_url"
-    
     print_message $GREEN "✅ Successfully updated $package_name"
+}
+
+# Function to register this script globally
+register_global() {
+    echo "🔧 Registering update-git-deps command globally..."
+    
+    # Get the absolute path to the script
+    SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+    
+    # Check write permissions for /usr/local/bin
+    if [ -w /usr/local/bin ]; then
+        ln -sf "$SCRIPT_PATH" /usr/local/bin/update-git-deps
+        print_message $GREEN "✅ update-git-deps command successfully registered!"
+        print_message $BLUE "💡 Now you can use 'update-git-deps' from any folder"
+    else
+        print_message $YELLOW "🔐 Administrator rights are required to register the command:"
+        echo "sudo ln -sf '$SCRIPT_PATH' /usr/local/bin/update-git-deps"
+        echo ""
+        print_message $YELLOW "Or add this command to your ~/.bashrc:"
+        echo "alias update-git-deps='$SCRIPT_PATH'"
+    fi
+}
+
+# Function to uninstall global command
+uninstall_global() {
+    local bin_dir="$HOME/.local/bin"
+    local global_name="update-git-deps"
+    
+    if rm -f "$bin_dir/$global_name" 2>/dev/null; then
+        print_message $GREEN "✅ Successfully uninstalled global command: $global_name"
+    else
+        print_message $YELLOW "⚠️ Global command not found or already removed"
+    fi
 }
 
 # Main function
 main() {
     print_message $BLUE "🚀 Starting git dependencies update..."
+    
+    # Check if requirements.txt exists in current directory
+    if [[ ! -f "requirements.txt" ]]; then
+        print_message $RED "❌ requirements.txt not found in current directory"
+        print_message $YELLOW "Please run this command from a directory containing requirements.txt"
+        exit 1
+    fi
     
     # Check virtual environment
     check_venv
@@ -103,21 +140,37 @@ show_help() {
     echo "Update git-based Python dependencies by forcing reinstallation"
     echo ""
     echo "Options:"
-    echo "  -h, --help    Show this help message"
+    echo "  -h, --help       Show this help message"
+    echo "  --register       Register this script as global command 'update-git-deps'"
+    echo "  --uninstall      Remove global command 'update-git-deps'"
     echo ""
     echo "Before running this script:"
     echo "1. Make sure your virtual environment is activated"
     echo "2. Ensure you have SSH access to the git repositories"
+    echo "3. Run from directory containing requirements.txt"
     echo ""
     echo "Example:"
+    echo "  # Register globally"
+    echo "  ./update_git_deps.sh --register"
+    echo ""
+    echo "  # Use after registration"
+    echo "  cd /path/to/your/project"
     echo "  source .venv/bin/activate"
-    echo "  ./update_git_deps.sh"
+    echo "  update-git-deps"
 }
 
 # Parse command line arguments
 case "${1:-}" in
     -h|--help)
         show_help
+        exit 0
+        ;;
+    --register)
+        register_global
+        exit 0
+        ;;
+    --uninstall)
+        uninstall_global
         exit 0
         ;;
     "")
