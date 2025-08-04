@@ -10,7 +10,7 @@ Smart script for updating Python dependencies from git repositories with automat
 
 # 2. Use from any project directory
 cd /path/to/your/project
-update-git-deps
+git-update-deps
 ```
 
 That's it! The script will automatically:
@@ -37,11 +37,11 @@ cd python_project_updater
 ## Usage Options
 
 ```bash
-update-git-deps [OPTIONS]
+git-update [OPTIONS]
 
 Options:
   -h, --help       Show help message
-  --register       Register as global command 'update-git-deps'
+  --register       Register as global command 'git-update'
   --uninstall      Remove global command
 ```
 
@@ -106,7 +106,7 @@ my-project/
 
 # Update dependencies
 cd my-project
-update-git-deps
+git-update
 ```
 
 ### Sample requirements.txt
@@ -148,7 +148,7 @@ ssh -T git@github.com
 ## Uninstallation
 
 ```bash
-update-git-deps --uninstall
+git-update --uninstall
 # or
-sudo rm -f /usr/local/bin/update-git-deps
+sudo rm -f /usr/local/bin/git-update
 ```

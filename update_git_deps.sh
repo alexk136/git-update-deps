@@ -94,39 +94,39 @@ update_git_package() {
 
 # Function to register this script globally
 register_global() {
-    echo "🔧 Registering update-git-deps command globally..."
+    echo "🔧 Registering git-update command globally..."
     
     # Get the absolute path to the script
     SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
     
     # Check write permissions for /usr/local/bin
     if [ -w /usr/local/bin ]; then
-        ln -sf "$SCRIPT_PATH" /usr/local/bin/update-git-deps
-        print_message $GREEN "✅ update-git-deps command successfully registered!"
-        print_message $BLUE "💡 Now you can use 'update-git-deps' from any folder"
+        ln -sf "$SCRIPT_PATH" /usr/local/bin/git-update
+        print_message $GREEN "✅ git-update command successfully registered!"
+        print_message $BLUE "💡 Now you can use 'git-update' from any folder"
     else
         print_message $YELLOW "🔐 Administrator rights are required to register the command:"
-        echo "sudo ln -sf '$SCRIPT_PATH' /usr/local/bin/update-git-deps"
+        echo "sudo ln -sf '$SCRIPT_PATH' /usr/local/bin/git-update"
         echo ""
         print_message $YELLOW "Or add this command to your ~/.bashrc:"
-        echo "alias update-git-deps='$SCRIPT_PATH'"
+        echo "alias git-update='$SCRIPT_PATH'"
     fi
 }
 
 # Function to uninstall global command
 uninstall_global() {
-    echo "🗑️ Removing update-git-deps command..."
+    echo "🗑️ Removing git-update command..."
     
     # Check write permissions for /usr/local/bin
     if [ -w /usr/local/bin ]; then
-        if rm -f /usr/local/bin/update-git-deps 2>/dev/null; then
-            print_message $GREEN "✅ Successfully removed global command: update-git-deps"
+        if rm -f /usr/local/bin/git-update 2>/dev/null; then
+            print_message $GREEN "✅ Successfully removed global command: git-update"
         else
             print_message $YELLOW "⚠️ Global command not found or already removed"
         fi
     else
         print_message $YELLOW "🔐 Administrator rights are required to remove the command:"
-        echo "sudo rm -f /usr/local/bin/update-git-deps"
+        echo "sudo rm -f /usr/local/bin/git-update"
         echo ""
         print_message $YELLOW "Or remove alias from your ~/.bashrc if you used that method"
     fi
@@ -192,8 +192,8 @@ show_help() {
     echo ""
     echo "Options:"
     echo "  -h, --help       Show this help message"
-    echo "  --register       Register this script as global command 'update-git-deps'"
-    echo "  --uninstall      Remove global command 'update-git-deps'"
+    echo "  --register       Register this script as global command 'git-update'"
+    echo "  --uninstall      Remove global command 'git-update'"
     echo ""
     echo "Requirements:"
     echo "1. Must have requirements.txt in current directory"
@@ -211,7 +211,7 @@ show_help() {
     echo "  # Use locally or globally"
     echo "  ./update_git_deps.sh"
     echo "  # or after registration:"
-    echo "  update-git-deps"
+    echo "  git-update"
 }
 
 # Parse command line arguments
