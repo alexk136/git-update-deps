@@ -10,7 +10,7 @@ Smart script for updating Python dependencies from git repositories with automat
 
 # 2. Use from any project directory
 cd /path/to/your/project
-git-update-deps
+git-update
 ```
 
 That's it! The script will automatically:
