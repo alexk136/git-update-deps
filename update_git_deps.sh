@@ -149,6 +149,10 @@ main() {
     # Get the appropriate pip command
     local pip_cmd=$(get_pip_cmd)
     print_message $BLUE "🔧 Using pip command: $pip_cmd"
+
+    # Обновить pip перед установкой зависимостей
+    print_message $YELLOW "⏫ Обновление pip..."
+    $pip_cmd install --upgrade pip
     
     # Parse requirements.txt for dependencies
 dependencies=$(grep -v "^#" requirements.txt | tr -d '\r' | grep -v "^$")
