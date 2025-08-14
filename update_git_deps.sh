@@ -158,13 +158,13 @@ dependencies=$(grep -v "^#" requirements.txt | tr -d '\r' | grep -v "^$")
         # Skip empty lines and comments
         [[ -z "$dep" || "$dep" =~ ^[[:space:]]*# ]] && continue
         
-        if [[ $dep == *"git+ssh://"* ]]; then
-            # Extract package name and git URL for @ syntax
+        if [[ $dep == *"git+ssh://"* || $dep == *"git+https://"* ]]; then
+            # Extract package name и git URL для @ синтаксиса
             if [[ $dep == *" @ "* ]]; then
                 package_name=$(echo "$dep" | cut -d' ' -f1)
                 git_url=$(echo "$dep" | sed 's/.* @ //')
             else
-                # Handle direct git+ssh URLs
+                # Обработка прямых git+ssh/git+https URL
                 package_name=$(basename "$dep" .git | sed 's/.*\///')
                 git_url="$dep"
             fi
